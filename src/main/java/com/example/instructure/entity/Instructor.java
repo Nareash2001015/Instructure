@@ -1,4 +1,4 @@
-package com.example.insutructure.entity;
+package com.example.instructure.entity;
 
 import jakarta.persistence.*;
 
@@ -30,7 +30,7 @@ public class Instructor {
     //Foreign classes
 
     @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY)
-    @JoinColumn(name = "instructorId")
+//    @JoinColumn(name = "instructorId")
     private Set<Course> courses = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.REMOVE)

@@ -1,42 +1,71 @@
-package com.example.insutructure.utility;
+package com.example.instructure.utility;
 
-import com.example.insutructure.dao.*;
-import com.example.insutructure.entity.*;
+import com.example.instructure.dao.*;
+import com.example.instructure.entity.*;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OperationUtility {
     public static void usersOperations(UserDao userDao ) {
         createUsers(userDao);
-        updateUser(userDao);
-        deleteUser(userDao);
-        fetchUser(userDao);
+//        updateUser(userDao);
+//        deleteUser(userDao);
+//        fetchUser(userDao);
     }
 
     public static void roleOperations(RoleDao roleDao) {
         createRoles(roleDao);
-        updateRoles(roleDao);
-        deleteRole(roleDao);
-        fetchRole(roleDao);
+//        updateRoles(roleDao);
+//        deleteRole(roleDao);
+//        fetchRole(roleDao);
     }
 
     public static void instructorOperations(InstructorDao instructorDao, RoleDao roleDao, UserDao userDao) {
         createInstructor(instructorDao, roleDao, userDao);
-        updateInstructor(instructorDao);
-        deleteInstructor(instructorDao);
-        fetchInstructor(instructorDao);
+//        updateInstructor(instructorDao);
+//        deleteInstructor(instructorDao);
+//        fetchInstructor(instructorDao);
     }
 
     public static void studentOperation(StudentDao studentDao, RoleDao roleDao, UserDao userDao) {
         createStudent(studentDao, roleDao, userDao);
-        updateStudent(studentDao);
-        deleteStudent(studentDao);
-        fetchStudent(studentDao);
+//        updateStudent(studentDao);
+//        deleteStudent(studentDao);
+//        fetchStudent(studentDao);
     }
 
-    public static void courseOperations(CourseDao courseDao, Instructor instructorDao, StudentDao studentDao) {
+    public static void courseOperations(CourseDao courseDao, InstructorDao instructorDao, StudentDao studentDao) {
         createCourse(courseDao, instructorDao);
+//        updateCourse(courseDao);
+//        deleteCourse(courseDao);
+//        fetchCourseForStudent(courseDao);
+//        assignStudentsToCourse(courseDao, studentDao);
+    }
+
+    public static void assignStudentsToCourse(CourseDao courseDao, StudentDao studentDao) {
+        Optional<Student> student1 = studentDao.findById(1L);
+        Optional<Student> student2 = studentDao.findById(2L);
+        Course course  = courseDao.findById(1L).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+
+        student1.ifPresent(course::assignStudentToCourse);
+        student2.ifPresent(course::assignStudentToCourse);
+        courseDao.save(course);
+    }
+
+    private static void fetchCourseForStudent(CourseDao courseDao) {
+        courseDao.getCoursesByStudentId(1L).forEach(course -> System.out.println(course.toString()));
+    }
+
+    private static void deleteCourse(CourseDao courseDao) {
+        courseDao.deleteById(2L);
+    }
+
+    private static void updateCourse(CourseDao courseDao) {
+        Course course = courseDao.findById(1L).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+        course.setCourseDuration("20 Hours");
+        courseDao.save(course);
     }
 
     private static void createCourse(CourseDao courseDao, InstructorDao instructorDao) {
